@@ -4,9 +4,9 @@ Author:  James Luxton
 Purpose: Create table to store base user account statuses
 *************************************************************************************************/
 
-IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'usr_account_status') DROP TABLE dbo.usr_account_status
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'user_account_status') DROP TABLE dbo.user_account_status
 
-CREATE TABLE dbo.usr_account_status
+CREATE TABLE dbo.user_account_status
 (
     user_account_status_id   NUMERIC       NOT NULL IDENTITY(1,1),
     user_account_status_code NVARCHAR(10)  NOT NULL,

@@ -21,7 +21,7 @@ DECLARE @d_insert_datetime DATETIME      = GETDATE(),
         (N'CLOSED', N'Open Closed'),
         (N'ERROR', N'Open in Error')
 
- INSERT INTO dbo.usr_account_status (
+ INSERT INTO dbo.user_account_status (
         user_account_status_code,
         user_account_status_desc,
         insert_datetime,

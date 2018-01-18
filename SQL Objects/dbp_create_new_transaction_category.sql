@@ -30,7 +30,7 @@ BEGIN
     
     IF NULLIF(LTRIM(@v_category_code), '') IS NOT NULL OR NULLIF(LTRIM(@pv_category_desc), '') IS NOT NULL
     BEGIN  
-        INSERT dbo.usr_account_transaction_category (
+        INSERT dbo.user_account_transaction_category (
                user_account_id,
                transaction_category_code,
                transaction_category_desc,
@@ -69,13 +69,13 @@ DEBUG CODE
 
 BEGIN TRANSACTION
 
-    EXEC dbp_create_new_transaction_category 2, N'Travel Accomodation'
-    EXEC dbp_create_new_transaction_category 2, N'12345'
-    EXEC dbp_create_new_transaction_category 2, 12345
-    EXEC dbp_create_new_transaction_category 2, NULL
-    EXEC dbp_create_new_transaction_category 2, N'TEST LONG CODE NOW'
-    EXEC dbp_create_new_transaction_category 2, N'Short'
-    SELECT * FROM usr_account_transaction_category
+    EXEC dbp_create_new_transaction_category 3, N'Travel Accomodation'
+    EXEC dbp_create_new_transaction_category 3, N'12345'
+    EXEC dbp_create_new_transaction_category 3, 12345
+    EXEC dbp_create_new_transaction_category 3, NULL
+    EXEC dbp_create_new_transaction_category 3, N'TEST LONG CODE NOW'
+    EXEC dbp_create_new_transaction_category 3, N'Short'
+    SELECT * FROM user_account_transaction_category
 
 ROLLBACK TRANSACTION
 

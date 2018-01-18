@@ -4,9 +4,9 @@ Author:  James Luxton
 Purpose: Create table to store account level transaction categories
 *************************************************************************************************/
 
-IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'usr_account_transaction_category') DROP TABLE dbo.usr_account_transaction_category
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'user_account_transaction_category') DROP TABLE dbo.user_account_transaction_category
 
-CREATE TABLE dbo.usr_account_transaction_category
+CREATE TABLE dbo.user_account_transaction_category
 (
     transaction_category_id   NUMERIC(18)     NOT NULL IDENTITY(1,1),
     user_account_id           NUMERIC(18)     NOT NULL,
@@ -20,5 +20,5 @@ CREATE TABLE dbo.usr_account_transaction_category
     update_user               NVARCHAR(128)   NULL, 
     update_process            NVARCHAR(128)   NULL,
     CONSTRAINT [pk_trans_category]                     PRIMARY KEY NONCLUSTERED (transaction_category_id),
-    CONSTRAINT [fk_trans_category__usr_account]        FOREIGN KEY (user_account_id)                 REFERENCES dbo.usr_account(user_account_id)
+    CONSTRAINT [fk_trans_category__user_account]       FOREIGN KEY (user_account_id)                 REFERENCES dbo.user_account(user_account_id)
 )

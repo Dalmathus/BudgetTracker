@@ -1,4 +1,4 @@
-/************************************************************************************************ 
+﻿/************************************************************************************************ 
 Date:    2017/12/28   
 Author:  James Luxton
 Purpose: Create a new user account login
@@ -18,7 +18,7 @@ CREATE PROCEDURE dbo.dbp_create_user_account
 AS
 BEGIN
 
-    DECLARE @n_usr_details_id    NUMERIC(18),
+    DECLARE @n_user_details_id   NUMERIC(18),
             @n_open_accnt_status NUMERIC(18)
 
     DECLARE @d_insert_datetime   DATETIME      = GETDATE(),
@@ -47,7 +47,7 @@ BEGIN
     END
 
     -- Check to see if the username already exists within the system
-    IF EXISTS (SELECT 1 FROM dbo.usr_details WHERE user_name = @pv_user_name AND active = N'Y')
+    IF EXISTS (SELECT 1 FROM dbo.user_details WHERE user_name = @pv_user_name AND active = N'Y')
     BEGIN
         RAISERROR (15600,-1,-1, 'Username already in use')
         RETURN -1
@@ -62,11 +62,11 @@ BEGIN
 
     -- Collect required ids
     SELECT @n_open_accnt_status = user_account_status_id
-      FROM dbo.usr_account_status
+      FROM dbo.user_account_status
      WHERE user_account_status_code = 'OPEN'
    
     -- Insert into User Details
-    INSERT dbo.usr_details (
+    INSERT dbo.user_details (
            first_name,
            last_name,
            user_name,
@@ -82,16 +82,16 @@ BEGIN
            @v_insert_user,
            @v_insert_process
 
-    SELECT @n_usr_details_id = SCOPE_IDENTITY()
+    SELECT @n_user_details_id = SCOPE_IDENTITY()
 
     -- Create the user account
-    INSERT dbo.usr_account (
+    INSERT dbo.user_account (
            user_details_id,
            user_account_status_id,
            insert_datetime,
            insert_user,
            insert_process)
-    SELECT @n_usr_details_id,      
+    SELECT @n_user_details_id,      
            @n_open_accnt_status,
            @d_insert_datetime,
            @v_insert_user,       
@@ -107,17 +107,20 @@ DEBUG CODE
 
 BEGIN TRANSACTION
 
-    EXEC dbp_create_user_account 'JAMES', 'LUXTON', 'UN7', 'PW'
+    EXEC dbo.dbp_create_user_account N'û%r♠╝ß∞', N'LUXTON', 'DEBUG1', 'PW'
+    EXEC dbo.dbp_create_user_account 'û%r♠╝ß∞', N'LUXTON', 'DEBUG2', 'PW'
+    EXEC dbo.dbp_create_user_account N'JAMES', N'LUXTON', 'DEBUG3', 'PW'
 
-    SELECT d.first_name               [First Name],
+    SELECT a.user_account_id          [Account Number],
+           d.first_name               [First Name],
            d.last_name                [Last Name],
            d.user_name                [Username],
            d.password                 [Password],
            s.user_account_status_code [Account Code],
            s.user_account_status_desc [Account Desc]
-      FROM dbo.usr_details        d
-      JOIN dbo.usr_account        a ON a.user_details_id = d.user_details_id
-      JOIN dbo.usr_account_status s ON s.user_account_status_id = a.user_account_status_id
+      FROM dbo.user_details        d
+      JOIN dbo.user_account        a ON a.user_details_id = d.user_details_id
+      JOIN dbo.user_account_status s ON s.user_account_status_id = a.user_account_status_id
 
 ROLLBACK TRANSACTION
 
