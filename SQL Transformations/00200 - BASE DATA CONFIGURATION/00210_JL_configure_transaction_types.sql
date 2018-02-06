@@ -1,38 +1,35 @@
 /************************************************************************************************ 
 Date:    2017/12/28   
 Author:  James Luxton
-Purpose: Configure account statuses
+Purpose: Configure transaction types
 *************************************************************************************************/
 BEGIN TRAN
 
-CREATE TABLE #stg_account_status (
-   user_account_status_code NVARCHAR(10),
-   user_account_status_desc NVARCHAR(100)
-)
+CREATE TABLE #stg_transaction_types ( transaction_type_code NVARCHAR(10), transaction_type_desc NVARCHAR(100))
 
 DECLARE @d_insert_datetime DATETIME      = GETDATE(),
         @v_insert_user     NVARCHAR(100) = HOST_NAME(),
         @v_insert_process  NVARCHAR(100) = N'DATALOAD',
         @c_update          CHAR(1)       = 'Y'
 
-INSERT INTO #stg_account_status ( user_account_status_code, user_account_status_desc )
+INSERT INTO #stg_transaction_types ( transaction_type_code, transaction_type_desc )
 VALUES
-     ( N'OPEN', N'Open Account' ),
-     ( N'CLOSED', N'Open Closed' ),
-     ( N'ERROR', N'Open in Error' )
+     ( N'PAY', N'Payment' ),
+     ( N'PUR', N'Purchase' ),
+     ( N'ERROR', N'Error' )
 
-INSERT INTO dbo.user_account_status
-     ( user_account_status_code,
-       user_account_status_desc,
+INSERT INTO dbo.bank_transaction_type
+     ( transaction_type_code,
+       transaction_type_desc,
        insert_datetime,
        insert_user,
        insert_process )
-SELECT stg.user_account_status_code,
-       stg.user_account_status_desc,
+SELECT stg.transaction_type_code,
+       stg.transaction_type_desc,
        @d_insert_datetime,
        @v_insert_user,
        @v_insert_process
-  FROM #stg_account_status stg
+  FROM #stg_transaction_types stg
 
 IF @c_update = 'Y' BEGIN
                       COMMIT TRAN
